@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import EditorJS from '@editorjs/editorjs';
+import Header from '@editorjs/header'
+import List from '@editorjs/list'
+import Embed from '@editorjs/embed'
 
-function App() {
+import "./App.css";
+
+const  App = () => {
+
+  const editor = new EditorJS({
+    holderId: 'editorjs',
+    tools: {
+      header: {
+        class: Header,
+        inlineToolbar: ['link']
+      },
+      list: {
+        class: List,
+        inlineToolbar: ['link', 'bold']
+      },
+      embed: {
+        class: Embed,
+        inlineToolbar: false,
+        config: {
+          services: {
+            youtube: true,
+            coub: true
+          }
+        }
+      }
+    }
+  });
+
+  const handleClick = () => {
+    return editor.save().then(output => console.info('Article data: ', output)).catch(error => console.error('Failed saving article: ', error))
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <h1>Understanding EditorJS</h1>
+      <div id='editorjs'></div>
+      <button onClick={handleClick}>Save article</button>
+    </>
+  )
 }
 
 export default App;
